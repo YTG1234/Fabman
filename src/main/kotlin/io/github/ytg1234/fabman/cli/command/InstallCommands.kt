@@ -59,7 +59,7 @@ object InstallManualCommand :
 
         addDependency(
             InstallablePackage(
-                FabmanPackage(mavenUrl = mavenUrl, group = groupId, artifact = artifactId, configurations = configurations ?: setOf("modImplementation")),
+                FabmanPackage(mavenUrl = mavenUrl, group = groupId, artifact = artifactId, configurations = configurations?.toList() ?: listOf("modImplementation")),
                 version
             ),
             config[Unit]!!.verbose

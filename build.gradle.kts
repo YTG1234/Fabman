@@ -33,6 +33,11 @@ dependencies {
 
 	// HTTP
 	implementation("io.ktor", "ktor-client-cio", "1.5.1")
+	implementation("io.ktor", "ktor-client-json", "1.5.1")
+	implementation("io.ktor", "ktor-client-serialization", "1.5.1")
+
+	// GitHub 😎
+	implementation("org.kohsuke", "github-api", "1.122")
 }
 
 tasks.withType<KotlinCompile> {

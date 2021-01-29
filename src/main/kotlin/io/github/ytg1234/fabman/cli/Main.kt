@@ -8,6 +8,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import io.github.ytg1234.fabman.cli.command.InstallCommand
 import io.github.ytg1234.fabman.cli.command.InstallManualCommand
 import io.github.ytg1234.fabman.cli.command.SetupCommand
+import io.github.ytg1234.fabman.cli.command.SubmitCommand
 import io.github.ytg1234.fabman.cli.command.UninstallCommand
 import io.github.ytg1234.fabman.cli.command.UninstallManualCommand
 import io.github.ytg1234.fabman.util.setupGlobalConfig
@@ -22,6 +23,6 @@ object FabmanCommand :
     }
 
     init {
-        subcommands(SetupCommand, InstallCommand, InstallManualCommand, UninstallCommand, UninstallManualCommand)
+        subcommands(SetupCommand, InstallCommand, InstallManualCommand, UninstallCommand, UninstallManualCommand, SubmitCommand)
     }
 }

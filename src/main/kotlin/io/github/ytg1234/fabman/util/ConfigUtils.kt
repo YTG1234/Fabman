@@ -3,6 +3,7 @@ package io.github.ytg1234.fabman.util
 import io.github.ytg1234.fabman.config.Dsl
 import io.github.ytg1234.fabman.config.FabmanConfig
 import io.github.ytg1234.fabman.dataspec.PackageStorage
+import io.github.ytg1234.fabman.jsonFormat
 import kotlinx.serialization.json.Json
 
 fun setupLocalConfig(): FabmanConfig {
@@ -29,7 +30,7 @@ fun setupLocalConfig(): FabmanConfig {
 
         Constants.fabmanLocalConfigPath.toFile().createNewFile()
         Constants.fabmanLocalConfigPath.toFile().writeText(
-            Json.encodeToString(
+            jsonFormat.encodeToString(
                 FabmanConfig.serializer(), FabmanConfig(
                     dsl,
                     multiProject,
@@ -39,23 +40,23 @@ fun setupLocalConfig(): FabmanConfig {
         )
     }
 
-    return Json.decodeFromString(FabmanConfig.serializer(), Constants.fabmanLocalConfigPath.toFile().readText())
+    return jsonFormat.decodeFromString(FabmanConfig.serializer(), Constants.fabmanLocalConfigPath.toFile().readText())
 }
 
 fun setupGlobalConfig(): PackageStorage {
     if (!Constants.fabmanGlobalConfigPath.toFile().exists()) {
         Constants.fabmanGlobalConfigPath.toFile().parentFile.mkdirs()
         Constants.fabmanGlobalConfigPath.toFile().createNewFile()
-        Constants.fabmanGlobalConfigPath.toFile().writeText(Json.encodeToString(PackageStorage.serializer(), PackageStorage(mapOf())))
+        Constants.fabmanGlobalConfigPath.toFile().writeText(jsonFormat.encodeToString(PackageStorage.serializer(), PackageStorage(mapOf())))
     }
 
-    return Json.decodeFromString(PackageStorage.serializer(), Constants.fabmanGlobalConfigPath.toFile().readText())
+    return jsonFormat.decodeFromString(PackageStorage.serializer(), Constants.fabmanGlobalConfigPath.toFile().readText())
 }
 
 fun saveConfig(config: PackageStorage) {
-    Constants.fabmanGlobalConfigPath.toFile().writeText(Json.encodeToString(PackageStorage.serializer(), config))
+    Constants.fabmanGlobalConfigPath.toFile().writeText(jsonFormat.encodeToString(PackageStorage.serializer(), config))
 }
 
 fun saveConfig(config: FabmanConfig) {
-    Constants.fabmanLocalConfigPath.toFile().writeText(Json.encodeToString(FabmanConfig.serializer(), config))
+    Constants.fabmanLocalConfigPath.toFile().writeText(jsonFormat.encodeToString(FabmanConfig.serializer(), config))
 }

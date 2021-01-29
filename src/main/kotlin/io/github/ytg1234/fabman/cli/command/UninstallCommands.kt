@@ -42,6 +42,6 @@ object UninstallManualCommand : CliktCommand(help = "Manually uninstalls a packa
         val localConf = setupLocalConfig()
         setupBuildscript(localConf.dsl, config[Unit]!!.verbose)
 
-        removeDependency(FabmanPackage(group = groupId, artifact = artifactId, configurations = configurations ?: setOf("modImplementation")), config[Unit]!!.verbose)
+        removeDependency(FabmanPackage(group = groupId, artifact = artifactId, configurations = configurations?.toList() ?: listOf("modImplementation")), config[Unit]!!.verbose)
     }
 }
