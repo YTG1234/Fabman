@@ -19,8 +19,20 @@ version = "1.0"
 
 dependencies {
 	implementation(kotlin("stdlib"))
+	runtimeOnly(kotlin("reflect"))
+
+	// Json
 	implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.0.1")
-	implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3")
+
+	// CLI
+	implementation("com.github.ajalt.clikt", "clikt", "3.1.0")
+
+	// Logging
+	implementation("io.github.microutils", "kotlin-logging-jvm", "2.0.4")
+	runtimeOnly("org.slf4j", "slf4j-simple", "1.7.9")
+
+	// HTTP
+	implementation("io.ktor", "ktor-client-cio", "1.5.1")
 }
 
 tasks.withType<KotlinCompile> {

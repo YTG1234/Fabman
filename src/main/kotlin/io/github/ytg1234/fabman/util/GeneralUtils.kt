@@ -1,16 +1,21 @@
 package io.github.ytg1234.fabman.util
 
-import io.github.ytg1234.fabman.dataspec.PackageStorage
+import io.github.ytg1234.fabman.client
 import io.github.ytg1234.fabman.dataspec.FabmanPackage
-import kotlin.system.exitProcess
+import io.github.ytg1234.fabman.dataspec.PackageStorage
+import io.github.ytg1234.fabman.logger
+import io.ktor.client.request.get
+import kotlinx.serialization.json.Json
+import mu.KLogger
 
-fun computePackage(id: String, config: PackageStorage): FabmanPackage = config.packages[id] ?: throw IllegalArgumentException("Package $id not found!")
-
-fun printHelpGuide() {
-    println(Constants.helpGuide)
+suspend fun computePackage(id: String, config: PackageStorage): FabmanPackage {
+    return config.packages[id] ?: computePackage(id)
 }
 
-fun printCmdlineErrorAndExit() {
-    System.err.println(Constants.helpGuide)
-    exitProcess(-1)
+suspend fun computePackage(id: String): FabmanPackage {
+    logger.info("Fetching ${String.format(Constants.packageUrlFormat, id)}")
+    return Json.decodeFromString(FabmanPackage.serializer(), client.get(String.format(Constants.packageUrlFormat, id)))
 }
+
+fun debugOrInfo(logger: KLogger, message: String, debug: Boolean) =
+    if (debug) logger.info(message) else logger.debug(message)

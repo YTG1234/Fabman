@@ -2,9 +2,11 @@ package io.github.ytg1234.fabman.util
 
 import io.github.ytg1234.fabman.config.Dsl
 import io.github.ytg1234.fabman.dataspec.FabmanPackage
+import io.github.ytg1234.fabman.logger
 import java.io.File
 
-fun setupBuildscript(dsl: Dsl) {
+fun setupBuildscript(dsl: Dsl, verbose: Boolean) {
+    debugOrInfo(logger, "Setting up Fab-Man buildscript", verbose)
     val projectBuildscript = when (dsl) {
         Dsl.GROOVY -> File("build.gradle")
         Dsl.KOTLIN -> File("build.gradle.kts")
@@ -16,6 +18,7 @@ fun setupBuildscript(dsl: Dsl) {
         fabmanBuildscript.writeText(Constants.fabmanBuildScriptDefaultText)
     }
 
+    debugOrInfo(logger, "Adding apply from to the main buildscript", verbose)
     if (!projectBuildscript.readText().contains(Constants.fabmanBuildscriptPath)) {
         when (dsl) {
             Dsl.GROOVY -> projectBuildscript.appendText("\napply from: '${Constants.fabmanBuildscriptPath}'\n")
@@ -24,11 +27,12 @@ fun setupBuildscript(dsl: Dsl) {
     }
 }
 
-fun addDependency(pkg: FabmanPackage, version: String) {
+fun addDependency(pkg: InstallablePackage, verbose: Boolean) {
     val fabmanBuildscript = File(Constants.fabmanBuildscriptPath)
     var txt = fabmanBuildscript.readText()
 
     // Add Repo
+    debugOrInfo(logger, "Adding Maven repo ${pkg.mavenUrl}", verbose)
     if (!txt.contains("""maven(url = "${pkg.mavenUrl}")""")) {
         fabmanBuildscript.writeText(
             txt.replaceFirst(
@@ -39,22 +43,26 @@ fun addDependency(pkg: FabmanPackage, version: String) {
             )
         )
     }
+    debugOrInfo(logger, "Added Repo ${pkg.mavenUrl}", verbose)
 
     txt = fabmanBuildscript.readText()
 
     // Add Dependency
+    debugOrInfo(logger, "Adding package", verbose)
     if (txt.contains(regexForConfigs(pkg))) txt = regexForConfigs(pkg).replace(txt, "")
     fabmanBuildscript.writeText(
         txt.replaceFirst(
             "    " + Constants.buildScriptDependencyMarker,
             pkg.configurations.joinToString("\n") {
+                debugOrInfo(logger, "Adding for configuration $it", verbose)
+
                 """
-                |    configurations.getByName("$it")("${pkg.group}", "${pkg.artifact}", "$version")
+                |    configurations.getByName("$it")("${pkg.group}", "${pkg.artifact}", "${pkg.version}")
                 """.trimMargin("|")
             } + "\n    ${Constants.buildScriptDependencyMarker}"
         )
     )
-    println("Successfully added ${pkg.group}:${pkg.artifact}:$version")
+    logger.info("Successfully added ${pkg.group}:${pkg.artifact}:${pkg.version}")
 }
 
 fun regexForConfigs(pkg: FabmanPackage): Regex =
@@ -69,12 +77,13 @@ fun regexForConfigs(pkg: FabmanPackage): Regex =
         }
     )
 
-fun removeDependency(pkg: FabmanPackage) {
+fun removeDependency(pkg: FabmanPackage, verbose: Boolean) {
     val fabmanBuildscript = File(Constants.fabmanBuildscriptPath)
     val txt = fabmanBuildscript.readText()
     val regexConfiguration = regexForConfigs(pkg)
 
+    debugOrInfo(logger, "Removing package", verbose)
     fabmanBuildscript.writeText(regexConfiguration.replace(txt, ""))
 
-    println("Successfully removed ${pkg.group}:${pkg.artifact}:UNKNOWN_VERSION")
+    logger.info("Successfully removed ${pkg.group}:${pkg.artifact}:UNKNOWN_VERSION")
 }

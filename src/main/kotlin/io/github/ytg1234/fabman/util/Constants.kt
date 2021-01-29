@@ -6,8 +6,6 @@ object Constants {
     const val buildScriptRepositoryMarker = "// FABMAN REPOSITORIES"
     const val buildScriptDependencyMarker = "// FABMAN DEPENDENCIES"
 
-    const val implementationConfiguration = """configurations.getByName("modImplementation")"""
-
     const val fabmanBuildscriptPath = "fabman.gradle.kts"
 
     @JvmField
@@ -31,21 +29,5 @@ object Constants {
         }
     """.trimIndent() + "\n"
 
-	// TODO: Make submitting packages actually global and not user-specific
-    @JvmField
-    val helpGuide =
-        """
-        |Usage:
-        |fabman setup - Run the setup wizard thingy
-        |fabman install <package> <repo> - Installs a dependency
-        |   Where <package> is:
-        |       <group> <artifact> <version>
-        |       <package-slug>@<version>
-        |fabman uninstall <package> - Uninstalls a package
-        |   Where <package> is:
-        |       <group> <artifact> <configurations...>
-        |       <package-slug>
-        |fabman submit <slug> <group> <artifact> <repo> <configurations...> - Adds a dependency to DA LIST
-        |fabman help - Shows this
-        """.trimMargin("|")
+    const val packageUrlFormat = "https://raw.githubusercontent.com/YTG1234/fabman-repository/main/packages/%s.json"
 }
