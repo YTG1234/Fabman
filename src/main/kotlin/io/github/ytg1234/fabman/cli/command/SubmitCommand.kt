@@ -44,8 +44,8 @@ object SubmitCommand :
             """
             Here's what you need to do:
             1. Fork the GitHub repository https://github.com/YTG1234/fabman-repository.
-            2. Create a file 'packages/$slug.json' and add in the Json.
-            3. Fortunately we already generated the Json for you, you can copy it from below:
+            2. Create a file 'packages/$slug.json' and add in the Json. Then create a pull request and fill in all the necessary text fields.
+            Fortunately we already generated the Json for you, you can copy it from below:
             """.trimIndent() + "\n" + jsonFormat.encodeToString(
                 FabmanPackage.serializer(),
                 FabmanPackage(
