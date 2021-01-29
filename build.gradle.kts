@@ -1,11 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	kotlin("jvm") version "1.4.21"
+	val ktVersion = "1.4.21"
+
+	kotlin("jvm") version ktVersion
+	kotlin("plugin.serialization") version ktVersion
 	application
 }
 
 repositories {
+	maven(url = "https://kotlin.bintray.com/kotlinx")
+	jcenter()
 	mavenCentral()
 }
 
@@ -14,7 +19,8 @@ version = "1.0"
 
 dependencies {
 	implementation(kotlin("stdlib"))
-	implementation("com.google.code.gson", "gson", "2.8.6")
+	implementation("org.jetbrains.kotlinx", "kotlinx-serialization-json", "1.0.1")
+	implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3")
 }
 
 tasks.withType<KotlinCompile> {
@@ -27,5 +33,5 @@ tasks.withType<Wrapper> {
 }
 
 application {
-    mainClass.set("io.github.ytg1234.fabman.FabmanKt")
+    mainClass.set("io.github.ytg1234.fabman.MainKt")
 }

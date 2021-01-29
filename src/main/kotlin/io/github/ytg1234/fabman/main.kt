@@ -1,6 +1,5 @@
 package io.github.ytg1234.fabman
 
-import com.google.gson.Gson
 import io.github.ytg1234.fabman.dataspec.FabmanPackage
 import io.github.ytg1234.fabman.dataspec.PackageStorage
 import io.github.ytg1234.fabman.util.Constants
@@ -13,10 +12,15 @@ import io.github.ytg1234.fabman.util.saveConfig
 import io.github.ytg1234.fabman.util.setupBuildscript
 import io.github.ytg1234.fabman.util.setupGlobalConfig
 import io.github.ytg1234.fabman.util.setupLocalConfig
+import kotlinx.cli.ArgParser
+import kotlinx.cli.ArgType
+import kotlinx.cli.default
 
 fun main(args: Array<String>) {
-    val gson = Gson()
-    val globalConfig = setupGlobalConfig(gson)
+    val globalConfig = setupGlobalConfig()
+
+//    val parser = ArgParser("fabman")
+//    val verbose by parser.option(ArgType.Boolean, "verbose", "v", "Enable verbose output").default(false)
 
     if (args.isEmpty()) printCmdlineErrorAndExit()
 
@@ -24,11 +28,11 @@ fun main(args: Array<String>) {
         "setup" -> {
             if (Constants.fabmanLocalConfigPath.toFile().exists()) Constants.fabmanLocalConfigPath.toFile().delete()
 
-            val config = setupLocalConfig(gson)
+            val config = setupLocalConfig()
             setupBuildscript(config.dsl)
         }
         "install" -> {
-            val localConfig = setupLocalConfig(gson)
+            val localConfig = setupLocalConfig()
             setupBuildscript(localConfig.dsl)
 
             if (args.size in 3..4 || args.size == 1) printCmdlineErrorAndExit()
@@ -49,7 +53,7 @@ fun main(args: Array<String>) {
             }
         }
         "uninstall" -> {
-            val localConfig = setupLocalConfig(gson)
+            val localConfig = setupLocalConfig()
             setupBuildscript(localConfig.dsl)
 
             if (args.size == 1) printCmdlineErrorAndExit()
@@ -81,7 +85,7 @@ fun main(args: Array<String>) {
                     config
                 ))
             )
-            saveConfig(gson, newConfig)
+            saveConfig(newConfig)
             println("Added package $slug: $group:$artifact from $repo with ${config.joinToString(", ")}")
         }
         "help" -> {

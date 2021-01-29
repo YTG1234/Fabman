@@ -1,11 +1,11 @@
 package io.github.ytg1234.fabman.util
 
-import com.google.gson.Gson
-import io.github.ytg1234.fabman.Dsl
+import io.github.ytg1234.fabman.config.Dsl
 import io.github.ytg1234.fabman.config.FabmanConfig
 import io.github.ytg1234.fabman.dataspec.PackageStorage
+import kotlinx.serialization.json.Json
 
-fun setupLocalConfig(gson: Gson): FabmanConfig {
+fun setupLocalConfig(): FabmanConfig {
     if (!Constants.fabmanLocalConfigPath.toFile().exists()) {
         println("Hello! Looks like this is the first time you ran Fab-Man in this project, let's get you set up!")
 
@@ -28,32 +28,34 @@ fun setupLocalConfig(gson: Gson): FabmanConfig {
         }.toBoolean()
 
         Constants.fabmanLocalConfigPath.toFile().createNewFile()
-        Constants.fabmanLocalConfigPath.toFile().writeText(gson.toJson(
-            FabmanConfig(
-                dsl,
-                multiProject,
-                applyToRoot
+        Constants.fabmanLocalConfigPath.toFile().writeText(
+            Json.encodeToString(
+                FabmanConfig.serializer(), FabmanConfig(
+                    dsl,
+                    multiProject,
+                    applyToRoot
+                )
             )
-        ))
+        )
     }
 
-    return gson.fromJson(Constants.fabmanLocalConfigPath.toFile().readText(), FabmanConfig::class.java)
+    return Json.decodeFromString(FabmanConfig.serializer(), Constants.fabmanLocalConfigPath.toFile().readText())
 }
 
-fun setupGlobalConfig(gson: Gson): PackageStorage {
+fun setupGlobalConfig(): PackageStorage {
     if (!Constants.fabmanGlobalConfigPath.toFile().exists()) {
         Constants.fabmanGlobalConfigPath.toFile().parentFile.mkdirs()
         Constants.fabmanGlobalConfigPath.toFile().createNewFile()
-        Constants.fabmanGlobalConfigPath.toFile().writeText(gson.toJson(PackageStorage(mapOf())))
+        Constants.fabmanGlobalConfigPath.toFile().writeText(Json.encodeToString(PackageStorage.serializer(), PackageStorage(mapOf())))
     }
 
-    return gson.fromJson(Constants.fabmanGlobalConfigPath.toFile().readText(), PackageStorage::class.java)
+    return Json.decodeFromString(PackageStorage.serializer(), Constants.fabmanGlobalConfigPath.toFile().readText())
 }
 
-fun saveConfig(gson: Gson, config: PackageStorage) {
-    Constants.fabmanGlobalConfigPath.toFile().writeText(gson.toJson(config))
+fun saveConfig(config: PackageStorage) {
+    Constants.fabmanGlobalConfigPath.toFile().writeText(Json.encodeToString(PackageStorage.serializer(), config))
 }
 
-fun saveConfig(gson: Gson, config: FabmanConfig) {
-    Constants.fabmanLocalConfigPath.toFile().writeText(gson.toJson(config))
+fun saveConfig(config: FabmanConfig) {
+    Constants.fabmanLocalConfigPath.toFile().writeText(Json.encodeToString(FabmanConfig.serializer(), config))
 }

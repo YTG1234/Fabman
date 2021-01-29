@@ -1,6 +1,6 @@
 package io.github.ytg1234.fabman.util
 
-import io.github.ytg1234.fabman.Dsl
+import io.github.ytg1234.fabman.config.Dsl
 import io.github.ytg1234.fabman.dataspec.FabmanPackage
 import java.io.File
 
