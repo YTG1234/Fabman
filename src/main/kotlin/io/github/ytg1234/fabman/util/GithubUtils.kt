@@ -106,7 +106,7 @@ class GithubUtils(
                 mapOf(
                     "message" to message.json,
                     "branch" to branch.json,
-                    "content" to Base64.getEncoder().encodeToString(content.toByteArray()).json
+                    "content" to content.json
                 )
             )
             body = interBody.toString()
