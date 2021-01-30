@@ -68,10 +68,10 @@ object SubmitCommand :
 
             val branchUuid = UUID.randomUUID().toString()
             val forkedRepo =
-                (ghUtils.fork("YTG1234", "fabman-repository", org)["url"]?.jsonPrimitive?.contentOrNull ?: run {
+                (ghUtils.fork(Constants.repoAuthor, Constants.repoName, org)["url"]?.jsonPrimitive?.contentOrNull ?: run {
                     echo("Could not fork the repository.", err = true)
                     return@runBlocking
-                }).replace("https://api.github.com/repos/", "")
+                }).replace("${Constants.defaultGithubApiHost}/repos/", "")
 
             ghUtils.createBranch(forkedRepo, branchUuid)
             ghUtils.createOrModifyFile(
@@ -116,7 +116,7 @@ object SubmitCommand :
         } else echo(
             """
             Here's what you need to do:
-            1. Fork the GitHub repository https://github.com/YTG1234/fabman-repository.
+            1. Fork the GitHub repository ${Constants.repoUrl}.
             2. Create a file 'packages/$slug.json' and add in the Json. Then create a pull request and fill in all the necessary text fields.
             Fortunately we already generated the Json for you, you can copy it from below:
             """.trimIndent() + "\n" + jsonFormat.encodeToString(

@@ -25,7 +25,7 @@ class GithubUtils(
     val token: String,
     val client: HttpClient,
     val json: Json,
-    val api: String = "https://api.github.com",
+    val api: String = Constants.defaultGithubApiHost,
     val verbose: Boolean
 ) {
     suspend fun fork(author: String, repo: String, org: String? = null) = fork("$author/$repo", org)

@@ -33,5 +33,12 @@ object Constants {
         "public_repo"
     )
 
-    const val packageUrlFormat = "https://raw.githubusercontent.com/YTG1234/fabman-repository/main/packages/%s.json"
+    const val repoAuthor = "YTG1234"
+    const val repoName = "fabman-repository"
+    @JvmField
+    val repoUrl = "https://github.com/$repoAuthor/$repoName"
+
+    const val defaultGithubApiHost = "https://api.github.com"
+
+    @JvmField val packageUrlFormat = "https://raw.githubusercontent.com/$repoAuthor/$repoName/main/packages/%s.json"
 }
