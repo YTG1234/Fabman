@@ -29,5 +29,9 @@ object Constants {
         }
     """.trimIndent() + "\n"
 
+    val submitPerms = listOf(
+        "public_repo"
+    )
+
     const val packageUrlFormat = "https://raw.githubusercontent.com/YTG1234/fabman-repository/main/packages/%s.json"
 }
