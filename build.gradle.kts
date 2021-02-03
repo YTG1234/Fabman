@@ -10,8 +10,7 @@ plugins {
 
 repositories {
 	maven(url = "https://kotlin.bintray.com/kotlinx")
-	jcenter()
-	mavenCentral()
+	maven(url = "https://repo.gradle.org/gradle/repo/")
 }
 
 group = "io.github.ytg1234"
